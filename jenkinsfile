@@ -1,0 +1,31 @@
+pipeline {
+      agent { leble 'jenkins-agent' }
+      tool { 
+           jdk 'java17'
+           maven 'maven3'
+      }
+      stages {
+          stage("cleanup workspace"){
+                 steps {
+                cleanWs()
+              }
+           }
+       
+          stage ("Checkout from SCM"){
+                 steps {
+                    git branch: 'main', credentialsId: 'github', url: ''
+               }
+            }
+       
+            stage("Build Application"){
+                 steps {
+                    sh "mvn clean package"
+               }
+            }
+            stage("Test Application"){
+                 steps {
+                     sh "mvn Test"
+               }
+            }
+         }
+      }
